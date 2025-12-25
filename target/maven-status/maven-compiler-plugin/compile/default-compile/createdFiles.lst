@@ -1,0 +1,13 @@
+com\hrs\hotel\util\DatabaseConnection.class
+com\hrs\hotel\controller\LogoutServlet.class
+com\hrs\hotel\controller\LoginServlet.class
+com\hrs\hotel\dao\BookingDAO.class
+com\hrs\hotel\dao\UserDAO.class
+com\hrs\hotel\controller\CancelBookingServlet.class
+com\hrs\hotel\controller\UpdateBookingServlet.class
+com\hrs\hotel\controller\BookRoomServlet.class
+com\hrs\hotel\JakartaRestConfiguration.class
+com\hrs\hotel\model\Booking.class
+com\hrs\hotel\controller\RegisterServlet.class
+com\hrs\hotel\resources\JakartaEE8Resource.class
+com\hrs\hotel\model\User.class
