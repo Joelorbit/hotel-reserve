@@ -18,8 +18,16 @@ public class LoginServlet extends HttpServlet {
 
         if (user != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("user", user); // Store user object for security
-            response.sendRedirect("dashboard.jsp");
+            session.setAttribute("user", user); 
+
+            // Check the role retrieved from the database
+            if ("admin".equals(user.getRole())) {
+                // If the role is 'admin', send them to the admin folder's dashboard
+                response.sendRedirect("admin/dashboard.jsp");
+            } else {
+                // Otherwise, send them to the regular user dashboard
+                response.sendRedirect("dashboard.jsp");
+            }
         } else {
             response.sendRedirect("login.html?error=1");
         }
