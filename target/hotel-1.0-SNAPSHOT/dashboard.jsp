@@ -3,109 +3,110 @@
 <%@page import="com.hrs.hotel.dao.BookingDAO"%>
 <%@page import="java.util.List"%>
 <%
-    // 1. Session Security Check
     User user = (User) session.getAttribute("user");
     if (user == null) { 
         response.sendRedirect("login.html"); 
         return; 
     }
-
-    // 2. Fetch Data from SQL (CRUD: Read)
     BookingDAO dao = new BookingDAO();
     int totalBookings = dao.getBookingCount(user.getEmail());
     List<Booking> myReservations = dao.getUserBookings(user.getEmail());
-    
-    // Status message handling
     String status = request.getParameter("status");
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <title>Dashboard | HRS</title>
 </head>
-<body class="bg-white font-['Inter']">
+<body style="background-color: white; font-family: 'Inter', sans-serif; margin: 0;">
 
-    <% if("success".equals(status)) { %>
-        <div class="fixed top-5 left-1/2 -translate-x-1/2 bg-green-500 text-white px-8 py-3 rounded-full font-bold shadow-xl z-50 flex items-center gap-2">
-            <i class="fas fa-check-circle"></i> Reservation Successful!
+    <%-- Status message handling --%>
+    <%-- Updated Notification Styling --%>
+<% if(status != null) { 
+    String msg = "";
+    String bgColor = "";
+    String icon = "";
+    
+    if("success".equals(status)) {
+        msg = "Reservation Successful!";
+        bgColor = "#22c55e"; // Green
+        icon = "fa-check-circle";
+    } else if("updated".equals(status)) {
+        msg = "Booking Updated!";
+        bgColor = "#000000"; // Black
+        icon = "fa-sync";
+    } else if("cancelled".equals(status)) {
+        msg = "Booking Cancelled.";
+        bgColor = "#ef4444"; // Red
+        icon = "fa-trash-alt";
+    }
+    
+    if(!msg.isEmpty()) { %>
+        <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
+                    background-color: <%= bgColor %>; color: white; padding: 12px 30px; 
+                    border-radius: 50px; font-weight: 900; font-size: 14px; z-index: 1000; 
+                    display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <i class="fas <%= icon %>"></i> <%= msg %>
         </div>
-    <% } else if("updated".equals(status)) { %>
-        <div class="fixed top-5 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-3 rounded-full font-bold shadow-xl z-50 flex items-center gap-2">
-            <i class="fas fa-check-circle"></i> Booking Updated!
+    <% } 
+} %>
+    <nav style="padding: 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f8fafc;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="height: 2.5rem; width: 2.5rem; background-color: black; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-style: italic;">H</div>
+            <span style="font-weight: 900; font-size: 1.25rem; letter-spacing: -0.05em; text-transform: uppercase;">Dashboard.</span>
         </div>
-    <% } else if("cancelled".equals(status)) { %>
-        <div class="fixed top-5 left-1/2 -translate-x-1/2 bg-black text-white px-8 py-3 rounded-full font-bold shadow-xl z-50">
-            Booking Cancelled.
-        </div>
-    <% } %>
-
-    <nav class="p-8 flex justify-between items-center border-b border-slate-50">
-        <div class="flex items-center gap-3">
-            <div class="h-10 w-10 bg-black rounded-lg flex items-center justify-center text-white font-black italic">H</div>
-            <span class="font-black text-xl tracking-tighter uppercase">Dashboard.</span>
-        </div>
-        <div class="flex items-center gap-6 text-sm">
-            <span class="font-bold uppercase tracking-tighter text-slate-400 italic">Active Member: <%= user.getFullname() %></span>
-            <a href="LogoutServlet" class="bg-black text-white px-8 py-2 rounded-full font-black text-xs hover:bg-slate-800 transition-all">LOGOUT</a>
+        <div style="display: flex; align-items: center; gap: 1.5rem; font-size: 0.875rem;">
+            <span style="font-weight: 700; text-transform: uppercase; letter-spacing: -0.05em; color: #94a3b8; font-style: italic;">Active Member: <%= user.getFullname() %></span>
+            <a href="LogoutServlet" style="background-color: black; color: white; padding: 0.5rem 2rem; border-radius: 9999px; font-weight: 900; font-size: 0.75rem; text-decoration: none;">LOGOUT</a>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto p-10">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            
-            <div class="md:col-span-2 bg-slate-950 rounded-[3.5rem] p-16 text-white relative overflow-hidden">
-                <h2 class="text-6xl font-black leading-none uppercase">Welcome home, <br><span class="text-slate-500"><%= user.getFullname() %></span></h2>
-                <p class="mt-6 text-slate-400 text-lg">Your next sanctuary is just one click away.</p>
-                <a href="rooms.jsp" class="bg-white text-black px-12 py-5 rounded-full font-black text-sm mt-10 inline-block hover:scale-110 transition-transform">New Reservation</a>
-                <div class="absolute -right-20 -bottom-20 text-[250px] font-black text-white/5 italic select-none">HRS</div>
+    <main style="max-width: 80rem; margin: 0 auto; padding: 2.5rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 4rem;">
+            <div style="grid-column: span 2; background-color: #020617; border-radius: 3.5rem; padding: 4rem; color: white; position: relative; overflow: hidden;">
+                <h2 style="font-size: 3.75rem; font-weight: 900; line-height: 1; text-transform: uppercase; margin: 0;">Welcome home, <br><span style="color: #64748b;"><%= user.getFullname() %></span></h2>
+                <p style="margin-top: 1.5rem; color: #94a3b8; font-size: 1.125rem;">Your next sanctuary is just one click away.</p>
+                <a href="rooms.jsp" style="background-color: white; color: black; padding: 1.25rem 3rem; border-radius: 9999px; font-weight: 900; font-size: 0.875rem; margin-top: 2.5rem; display: inline-block; text-decoration: none;">New Reservation</a>
+                <div style="position: absolute; right: -5rem; bottom: -5rem; font-size: 250px; font-weight: 900; color: rgba(255,255,255,0.05); font-style: italic; user-select: none;">HRS</div>
             </div>
 
-            <div class="bg-slate-50 rounded-[3.5rem] p-12 flex flex-col justify-between border border-slate-100 hover:bg-white transition-all group">
-                <div class="h-14 w-14 bg-black rounded-2xl flex items-center justify-center text-white text-xl shadow-lg">
+            <div style="background-color: #f8fafc; border-radius: 3.5rem; padding: 3rem; border: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="height: 3.5rem; width: 3.5rem; background-color: black; border-radius: 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem;">
                     <i class="fas fa-calendar-alt"></i>
                 </div>
                 <div>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Total Bookings</p>
-                    <h3 class="text-7xl font-black mt-2 tracking-tighter"><%= totalBookings %></h3>
+                    <p style="font-size: 10px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3em; margin: 0;">Total Bookings</p>
+                    <h3 style="font-size: 4.5rem; font-weight: 900; margin-top: 0.5rem; letter-spacing: -0.05em; line-height: 1;"><%= totalBookings %></h3>
                 </div>
             </div>
         </div>
 
-        <h3 class="text-3xl font-black mb-8 tracking-tighter">My Active Reservations</h3>
-        <div class="bg-white border border-slate-100 rounded-[2.5rem] overflow-hidden shadow-sm">
-            <table class="w-full text-left">
-                <thead class="bg-slate-50/50 border-b border-slate-100">
+        <h3 style="font-size: 1.875rem; font-weight: 900; margin-bottom: 2rem; letter-spacing: -0.05em;">My Active Reservations</h3>
+        <div style="background-color: white; border: 1px solid #f1f5f9; border-radius: 2.5rem; overflow: hidden; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead style="background-color: #f8fafc; border-bottom: 1px solid #f1f5f9;">
                     <tr>
-                        <th class="px-10 py-6 text-[10px] font-black uppercase text-slate-400 tracking-widest">Suite & Room Number</th>
-                        <th class="px-10 py-6 text-[10px] font-black uppercase text-slate-400 tracking-widest">Rate</th>
-                        <th class="px-10 py-6 text-[10px] font-black uppercase text-slate-400 tracking-widest text-right">Actions</th>
+                        <th style="padding: 1.5rem 2.5rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.1em;">Suite & Room Number</th>
+                        <th style="padding: 1.5rem 2.5rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.1em;">Rate</th>
+                        <th style="padding: 1.5rem 2.5rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.1em; text-align: right;">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-50">
+                <tbody>
                     <% if(myReservations.isEmpty()) { %>
-                        <tr><td colspan="3" class="p-20 text-center text-slate-300 font-bold italic">No active reservations found.</td></tr>
+                        <tr><td colspan="3" style="padding: 5rem; text-align: center; color: #cbd5e1; font-weight: 700; font-style: italic;">No active reservations found.</td></tr>
                     <% } else { 
                         for(Booking b : myReservations) { %>
-                        <tr class="hover:bg-slate-50/30 transition-colors">
-                            <td class="px-10 py-8 font-black text-xl tracking-tight uppercase">
-                                <%= b.getRoomType() %>
-                            </td>
-                            <td class="px-10 py-8 text-slate-500 font-bold">$<%= b.getPrice() %></td>
-                            <td class="px-10 py-8 text-right flex gap-6 justify-end items-center">
-                                
-                                <a href="editdetails.jsp?id=<%= b.getId() %>" class="text-slate-400 font-black text-[10px] hover:text-black uppercase tracking-widest">
-                                    Edit Details
-                                </a>
-
-                                <form action="CancelBookingServlet" method="POST" onsubmit="return confirm('Cancel this stay?');">
+                        <tr style="border-bottom: 1px solid #f8fafc;">
+                            <td style="padding: 2rem 2.5rem; font-weight: 900; font-size: 1.25rem; text-transform: uppercase;"><%= b.getRoomType() %></td>
+                            <td style="padding: 2rem 2.5rem; color: #64748b; font-weight: 700;">$<%= b.getPrice() %></td>
+                            <td style="padding: 2rem 2.5rem; text-align: right; display: flex; gap: 1.5rem; justify-content: flex-end; align-items: center;">
+                                <a href="editdetails.jsp?id=<%= b.getId() %>" style="color: #94a3b8; font-weight: 900; font-size: 10px; text-transform: uppercase; text-decoration: none; letter-spacing: 0.1em;">Edit Details</a>
+                                <form action="CancelBookingServlet" method="POST" onsubmit="return confirm('Cancel this stay?');" style="margin: 0;">
                                     <input type="hidden" name="bookingId" value="<%= b.getId() %>">
-                                    <button type="submit" class="text-red-500 font-black text-[10px] hover:underline uppercase tracking-widest bg-red-50 px-5 py-2.5 rounded-full transition-all hover:bg-red-500 hover:text-white">
-                                        Cancel Stay
-                                    </button>
+                                    <button type="submit" style="color: #ef4444; font-weight: 900; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; background-color: #fef2f2; border: none; padding: 0.625rem 1.25rem; border-radius: 9999px; cursor: pointer;">Cancel Stay</button>
                                 </form>
                             </td>
                         </tr>

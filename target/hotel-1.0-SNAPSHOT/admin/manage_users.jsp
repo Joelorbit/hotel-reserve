@@ -2,52 +2,49 @@
 <%@page import="com.hrs.hotel.dao.AdminDAO"%>
 <%@page import="java.util.List"%>
 <%
-    // Security check
-    User admin = (User) session.getAttribute("user");
-    if (admin == null || !"admin".equals(admin.getRole())) {
+    User adminUserList = (User) session.getAttribute("user");
+    if (adminUserList == null || !"admin".equals(adminUserList.getRole())) {
         response.sendRedirect("../login.html");
         return;
     }
 
-    // We will create this AdminDAO in the next part of this step
     AdminDAO dao = new AdminDAO();
     List<User> userList = dao.getAllUsers();
 %>
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <title>Manage Users | Admin</title>
 </head>
-<body class="bg-white font-['Inter'] p-10">
-    <div class="max-w-6xl mx-auto">
-        <div class="flex justify-between items-center mb-10">
-            <h2 class="text-4xl font-black uppercase tracking-tighter">Registered Users</h2>
-            <a href="dashboard.jsp" class="text-xs font-bold uppercase bg-slate-100 px-6 py-2 rounded-full">Back to Panel</a>
+<body style="background-color: white; font-family: 'Inter', sans-serif; padding: 2.5rem; margin: 0;">
+    <div style="max-width: 72.5rem; margin: 0 auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+            <h2 style="font-size: 2.25rem; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: -0.05em;">Registered Users</h2>
+            <a href="dashboard.jsp" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; background-color: #f1f5f9; padding: 0.5rem 1.5rem; border-radius: 9999px; text-decoration: none; color: inherit;">Back to Panel</a>
         </div>
 
-        <div class="bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm">
-            <table class="w-full text-left">
-                <thead class="bg-slate-50 border-b border-slate-100">
+        <div style="background-color: white; border: 1px solid #f1f5f9; border-radius: 2rem; overflow: hidden; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead style="background-color: #f8fafc; border-bottom: 1px solid #f1f5f9;">
                     <tr>
-                        <th class="px-8 py-5 text-[10px] font-black uppercase text-slate-400">ID</th>
-                        <th class="px-8 py-5 text-[10px] font-black uppercase text-slate-400">Full Name</th>
-                        <th class="px-8 py-5 text-[10px] font-black uppercase text-slate-400">Email</th>
-                        <th class="px-8 py-5 text-[10px] font-black uppercase text-slate-400 text-right">Action</th>
+                        <th style="padding: 1.25rem 2rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8;">ID</th>
+                        <th style="padding: 1.25rem 2rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8;">Full Name</th>
+                        <th style="padding: 1.25rem 2rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8;">Email</th>
+                        <th style="padding: 1.25rem 2rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; text-align: right;">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-50">
+                <tbody>
                     <% for(User u : userList) { %>
-                    <tr class="hover:bg-slate-50/50">
-                        <td class="px-8 py-6 font-bold text-slate-400 text-sm">#<%= u.getId() %></td>
-                        <td class="px-8 py-6 font-black uppercase text-sm"><%= u.getFullname() %></td>
-                        <td class="px-8 py-6 text-slate-500 text-sm"><%= u.getEmail() %></td>
-                        <td class="px-8 py-6 text-right">
+                    <tr style="border-bottom: 1px solid #f8fafc;">
+                        <td style="padding: 1.5rem 2rem; font-weight: 700; color: #94a3b8; font-size: 0.875rem;">#<%= u.getId() %></td>
+                        <td style="padding: 1.5rem 2rem; font-weight: 900; text-transform: uppercase; font-size: 0.875rem;"><%= u.getFullname() %></td>
+                        <td style="padding: 1.5rem 2rem; color: #64748b; font-size: 0.875rem;"><%= u.getEmail() %></td>
+                        <td style="padding: 1.5rem 2rem; text-align: right;">
                             <% if(!"admin".equals(u.getRole())) { %>
                             <form action="../DeleteUserServlet" method="POST" onsubmit="return confirm('Remove this user?')">
                                 <input type="hidden" name="userId" value="<%= u.getId() %>">
-                                <button type="submit" class="text-red-500 font-black text-[10px] uppercase tracking-widest bg-red-50 px-4 py-2 rounded-full hover:bg-red-500 hover:text-white transition-all">
+                                <button type="submit" style="color: #ef4444; font-weight: 900; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; background-color: #fef2f2; border: none; padding: 0.5rem 1rem; border-radius: 9999px; cursor: pointer;">
                                     Delete
                                 </button>
                             </form>

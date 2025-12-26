@@ -2,9 +2,8 @@
 <%@page import="com.hrs.hotel.dao.AdminDAO"%>
 <%@page import="java.util.List"%>
 <%
-    // Security check
-    com.hrs.hotel.model.User admin = (com.hrs.hotel.model.User) session.getAttribute("user");
-    if (admin == null || !"admin".equals(admin.getRole())) {
+    com.hrs.hotel.model.User adminCheck = (com.hrs.hotel.model.User) session.getAttribute("user");
+    if (adminCheck == null || !"admin".equals(adminCheck.getRole())) {
         response.sendRedirect("../login.html");
         return;
     }
@@ -15,53 +14,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <title>Manage Rooms | Admin</title>
 </head>
-<body class="bg-white font-['Inter'] p-10">
-    <div class="max-w-6xl mx-auto">
-        <div class="flex justify-between items-center mb-10">
+<body style="background-color: white; font-family: 'Inter', sans-serif; padding: 2.5rem; margin: 0;">
+    <div style="max-width: 72.5rem; margin: 0 auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
             <div>
-                <h2 class="text-4xl font-black uppercase tracking-tighter">Inventory Control</h2>
-                <p class="text-slate-400 font-bold uppercase text-[10px]">Total Active Rooms: <%= rooms.size() %></p>
+                <h2 style="font-size: 2.25rem; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: -0.05em;">Inventory Control</h2>
+                <p style="color: #94a3b8; font-weight: 700; text-transform: uppercase; font-size: 10px; margin: 0.25rem 0 0 0;">Total Active Rooms: <%= rooms.size() %></p>
             </div>
-            <div class="flex gap-3">
-                <a href="add_room.jsp" class="text-xs font-black uppercase bg-black text-white px-8 py-3 rounded-full hover:bg-red-600 transition-colors">
+            <div style="display: flex; gap: 0.75rem;">
+                <a href="add_room.jsp" style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; background-color: black; color: white; padding: 0.75rem 2rem; border-radius: 9999px; text-decoration: none;">
                     + Add New Room
                 </a>
-                <a href="dashboard_admin.jsp" class="text-xs font-bold uppercase bg-slate-100 px-8 py-3 rounded-full hover:bg-slate-200">
+                <a href="dashboard.jsp" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; background-color: #f1f5f9; color: inherit; padding: 0.75rem 2rem; border-radius: 9999px; text-decoration: none;">
                     Back to Admin
                 </a>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4">
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
             <% if(rooms.isEmpty()) { %>
-                <div class="text-center p-20 bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
-                    <p class="text-slate-400 font-bold uppercase">No rooms found in your catalog.</p>
+                <div style="text-align: center; padding: 5rem; background-color: #f8fafc; border-radius: 3rem; border: 1px dashed #e2e8f0;">
+                    <p style="color: #94a3b8; font-weight: 700; text-transform: uppercase; margin: 0;">No rooms found in your catalog.</p>
                 </div>
             <% } %>
 
             <% for(Room r : rooms) { %>
-            <div class="flex items-center justify-between bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-                <div class="flex items-center gap-6">
-                    <img src="<%= r.getImageUrl() %>" class="h-24 w-36 object-cover rounded-2xl shadow-inner bg-slate-100">
+            <div style="display: flex; align-items: center; justify-content: space-between; background-color: white; padding: 1.5rem; border-radius: 2.5rem; border: 1px solid #f1f5f9; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
+                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                    <img src="<%= r.getImageUrl() %>" style="height: 6rem; width: 9rem; object-fit: cover; border-radius: 1rem; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); background-color: #f1f5f9;">
                     <div>
-                        <h3 class="font-black uppercase text-xl tracking-tighter"><%= r.getName() %></h3>
-                        <p class="text-slate-400 font-bold">$<%= r.getPrice() %> <span class="text-[10px] uppercase">/ Night</span></p>
+                        <h3 style="font-weight: 900; text-transform: uppercase; font-size: 1.25rem; margin: 0; letter-spacing: -0.05em;"><%= r.getName() %></h3>
+                        <p style="color: #94a3b8; font-weight: 700; margin: 0.25rem 0 0 0;">$<%= r.getPrice() %> <span style="font-size: 10px; text-transform: uppercase;">/ Night</span></p>
                     </div>
                 </div>
                 
-                <div class="flex gap-3">
+                <div style="display: flex; gap: 0.75rem;">
                     <a href="edit_room.jsp?id=<%= r.getId() %>" 
-                       class="bg-blue-50 text-blue-600 px-8 py-4 rounded-2xl font-black text-[10px] uppercase hover:bg-blue-600 hover:text-white transition-all">
+                       style="background-color: #eff6ff; color: #2563eb; padding: 1rem 2rem; border-radius: 1rem; font-weight: 900; font-size: 10px; text-transform: uppercase; text-decoration: none;">
                        Edit Specs
                     </a>
 
-                    <form action="../DeleteRoomServlet" method="POST" onsubmit="return confirm('Permanently remove this room from your catalog?')">
+                    <form action="../DeleteRoomServlet" method="POST" onsubmit="return confirm('Permanently remove this room?')">
                         <input type="hidden" name="roomId" value="<%= r.getId() %>">
-                        <button type="submit" class="bg-red-50 text-red-500 px-8 py-4 rounded-2xl font-black text-[10px] uppercase hover:bg-red-500 hover:text-white transition-all">
+                        <button type="submit" style="background-color: #fef2f2; color: #ef4444; padding: 1rem 2rem; border-radius: 1rem; font-weight: 900; font-size: 10px; text-transform: uppercase; border: none; cursor: pointer;">
                             Remove
                         </button>
                     </form>

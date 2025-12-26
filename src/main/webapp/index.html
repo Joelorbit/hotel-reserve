@@ -3,54 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
     <title>HRS | Minimalist Booking</title>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
 </head>
-<body class="m-0 p-0 h-screen w-screen flex flex-col lg:flex-row bg-white overflow-hidden">
+<body style="margin: 0; padding: 0; height: 100vh; width: 100vw; display: flex; background-color: white; overflow: hidden; font-family: 'Inter', sans-serif;">
 
-    <div class="absolute top-0 left-0 w-full p-6 lg:p-8 flex justify-between items-start z-50">
-        <div class="mt-2 ml-2">
-            <div class="h-12 w-12 bg-black rounded-xl flex items-center justify-center text-white font-black text-2xl italic shadow-2xl hover:scale-110 transition-transform cursor-pointer">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; padding: 2rem; display: flex; justify-content: space-between; align-items: flex-start; z-index: 50; box-sizing: border-box;">
+        <div style="margin-top: 0.5rem; margin-left: 0.5rem;">
+            <div style="height: 3rem; width: 3rem; background-color: black; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.5rem; font-style: italic; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
                 H
             </div>
         </div>
         
-        <div class="flex items-center gap-4 mt-2 mr-2">
-            <a href="login.html" class="bg-white text-black px-8 py-3 rounded-full font-black text-sm shadow-[0_10px_30px_rgba(0,0,0,0.08)] hover:shadow-xl transition-all border border-slate-100">
-                Sign In
-            </a>
-            <a href="register.html" class="bg-black text-white px-8 py-3 rounded-full font-black text-sm shadow-lg hover:bg-slate-800 transition-all border border-black">
-                Register
-            </a>
+        <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; margin-right: 0.5rem;">
+            <a href="login.html" style="background-color: white; color: black; padding: 0.75rem 2rem; border-radius: 9999px; font-weight: 900; font-size: 0.875rem; text-decoration: none; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">Sign In</a>
+            <a href="register.html" style="background-color: black; color: white; padding: 0.75rem 2rem; border-radius: 9999px; font-weight: 900; font-size: 0.875rem; text-decoration: none; border: 1px solid black;">Register</a>
         </div>
     </div>
 
-    <div class="lg:w-1/2 h-full flex flex-col justify-center px-12 lg:px-24">
-        <div class="space-y-6 max-w-xl">
-            <h1 class="text-[6.5rem] lg:text-[7.5rem] font-black tracking-tighter text-slate-950 leading-[0.8] mb-4">
-                Luxury <br> redefined <br> <span class="text-slate-200">digitally.</span>
+    <div style="width: 50%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 6rem; box-sizing: border-box;">
+        <div style="max-width: 36rem;">
+            <h1 style="font-size: 7.5rem; font-weight: 900; letter-spacing: -0.05em; color: #020617; line-height: 0.8; margin: 0 0 1rem 0;">
+                Luxury <br> redefined <br> <span style="color: #e2e8f0;">digitally.</span>
             </h1>
-
-            <p class="text-xl text-slate-400 font-light max-w-sm">
-                The future of booking, simplified for the modern traveler.
-            </p>
-
-            <div class="pt-8">
-                <a href="register.html" class="bg-black text-white px-12 py-5 rounded-full font-bold text-sm tracking-wide hover:scale-105 transition-transform inline-block shadow-2xl">
-                    Explore Availability Of Rooms
-                </a>
+            <p style="font-size: 1.25rem; color: #94a3b8; font-weight: 300; max-width: 24rem;">The future of booking, simplified for the modern traveler.</p>
+            <div style="padding-top: 2rem;">
+                <a href="register.html" style="background-color: black; color: white; padding: 1.25rem 3rem; border-radius: 9999px; font-weight: 700; font-size: 0.875rem; text-decoration: none; letter-spacing: 0.025em; display: inline-block; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">Explore Availability Of Rooms</a>
             </div>
         </div>
     </div>
 
-    <div class="hidden lg:block lg:w-1/2 relative h-full">
-        <img src="https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1600&q=80" 
-             class="absolute inset-0 w-full h-full object-cover">
-        <div class="absolute inset-0 bg-black/5"></div>
+    <div style="width: 50%; position: relative; height: 100%;">
+        <img src="https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1600&q=80" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+        <div style="position: absolute; inset: 0; background-color: rgba(0,0,0,0.05);"></div>
     </div>
 
 </body>

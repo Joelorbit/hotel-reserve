@@ -1,10 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    // Get data from the URL parameters
     String type = request.getParameter("type");
     String price = request.getParameter("price");
-    
-    // Safety check: If someone lands here without picking a room, send them back
     if (type == null || price == null) {
         response.sendRedirect("rooms.jsp");
         return;
@@ -14,49 +11,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <title>Configure Your Stay | HRS</title>
 </head>
-<body class="bg-white font-['Inter'] flex items-center justify-center min-h-screen">
+<body style="background-color: #ffffff; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; min-height: screen; margin: 0; padding: 40px 0;">
 
-    <div class="max-w-md w-full p-10 bg-white border border-slate-100 rounded-[3rem] shadow-sm">
-        <div class="mb-10 text-center">
-            <div class="h-12 w-12 bg-black rounded-2xl flex items-center justify-center text-white font-bold italic mx-auto mb-6">H</div>
-            <h1 class="text-4xl font-black tracking-tighter">Setting up your</h1>
-            <h2 class="text-3xl font-black text-slate-300 uppercase"><%= type %></h2>
-            <p class="text-slate-400 mt-2 font-bold italic">Rate: $<%= price %> per night</p>
+    <div style="max-width: 400px; width: 100%; padding: 40px; border: 1px solid #f1f5f9; border-radius: 48px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <div style="height: 48px; width: 48px; background-color: #000; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-style: italic; margin: 0 auto 24px auto;">H</div>
+            <h1 style="font-size: 36px; font-weight: 900; letter-spacing: -0.05em; margin: 0;">Setting up your</h1>
+            <h2 style="font-size: 30px; font-weight: 900; color: #cbd5e1; text-transform: uppercase; margin: 0;"><%= type %></h2>
+            <p style="color: #94a3b8; margin-top: 8px; font-weight: bold; font-style: italic;">Rate: $<%= price %> per night</p>
         </div>
 
-        <form action="BookRoomServlet" method="POST" class="space-y-8">
+        <form action="BookRoomServlet" method="POST">
             <input type="hidden" name="roomType" value="<%= type %>">
             <input type="hidden" name="price" value="<%= price %>">
+            <input type="hidden" name="floor" id="selectedFloor" value="01">
 
-            <div>
-                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-4">Choose Floor</label>
-                <div class="grid grid-cols-4 gap-2">
-                    <label class="cursor-pointer">
-                        <input type="radio" name="floor" value="01" class="peer sr-only" checked>
-                        <div class="py-3 border-2 border-slate-100 rounded-xl text-center font-black text-slate-300 peer-checked:border-black peer-checked:text-black transition-all">01</div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="floor" value="02" class="peer sr-only">
-                        <div class="py-3 border-2 border-slate-100 rounded-xl text-center font-black text-slate-300 peer-checked:border-black peer-checked:text-black transition-all">02</div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="floor" value="03" class="peer sr-only">
-                        <div class="py-3 border-2 border-slate-100 rounded-xl text-center font-black text-slate-300 peer-checked:border-black peer-checked:text-black transition-all">03</div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="floor" value="04" class="peer sr-only">
-                        <div class="py-3 border-2 border-slate-100 rounded-xl text-center font-black text-slate-300 peer-checked:border-black peer-checked:text-black transition-all">04</div>
-                    </label>
+            <div style="margin-bottom: 32px;">
+                <label style="font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; display: block; margin-bottom: 16px;">Choose Floor</label>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                    <% for(int i=1; i<=4; i++) { 
+                        String f = "0" + i;
+                        String activeStyle = i == 1 ? "border: 2px solid #000; color: #000; background-color: #f8fafc;" : "border: 2px solid #f1f5f9; color: #cbd5e1;";
+                    %>
+                        <div id="floorBox<%= f %>" onclick="updateFloor('<%= f %>')" 
+                             style="padding: 12px 0; border-radius: 12px; text-align: center; font-weight: 900; cursor: pointer; transition: all 0.2s; <%= activeStyle %>">
+                            <%= f %>
+                        </div>
+                    <% } %>
                 </div>
             </div>
 
-            <div>
-                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-4">Select Room Number</label>
-                <select name="roomNumber" class="w-full bg-slate-50 border-none p-5 rounded-2xl font-black focus:ring-2 ring-black outline-none transition-all appearance-none">
+            <div style="margin-bottom: 32px;">
+                <label style="font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; display: block; margin-bottom: 16px;">Select Room Number</label>
+                <select name="roomNumber" style="width: 100%; background-color: #f8fafc; border: none; padding: 20px; border-radius: 16px; font-weight: 900; outline: none; appearance: none;">
                     <option value="101">Room 101</option>
                     <option value="102">Room 102</option>
                     <option value="103">Room 103</option>
@@ -64,11 +54,32 @@
                 </select>
             </div>
 
-            <button type="submit" class="w-full bg-black text-white py-6 rounded-3xl font-black text-sm uppercase tracking-widest hover:scale-105 transition-transform shadow-xl">
+            <button type="submit" style="width: 100%; background-color: #000; color: #fff; padding: 24px 0; border: none; border-radius: 24px; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
                 Confirm Booking
             </button>
         </form>
     </div>
 
+    <script>
+        function updateFloor(floorVal) {
+            // 1. Update the hidden input value
+            document.getElementById('selectedFloor').value = floorVal;
+
+            // 2. Reset all boxes and highlight the selected one
+            for(let i=1; i<=4; i++) {
+                let id = "0" + i;
+                let box = document.getElementById("floorBox" + id);
+                if(id === floorVal) {
+                    box.style.border = "2px solid #000";
+                    box.style.color = "#000";
+                    box.style.backgroundColor = "#f8fafc";
+                } else {
+                    box.style.border = "2px solid #f1f5f9";
+                    box.style.color = "#cbd5e1";
+                    box.style.backgroundColor = "transparent";
+                }
+            }
+        }
+    </script>
 </body>
 </html>

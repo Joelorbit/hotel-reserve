@@ -5,33 +5,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <title>Choose Your Experience | HRS</title>
 </head>
-<body class="bg-white font-['Inter'] p-8 lg:p-20">
-    <div class="max-w-7xl mx-auto">
-        <header class="mb-16">
-            <h1 class="text-7xl font-black tracking-tighter">Choose your <br><span class="text-slate-200">experience.</span></h1>
+<body style="background-color: white; font-family: 'Inter', sans-serif; padding: 5rem; margin: 0;">
+    <div style="max-width: 80rem; margin: 0 auto;">
+        <header style="margin-bottom: 4rem;">
+            <h1 style="font-size: 4.5rem; font-weight: 900; letter-spacing: -0.05em; line-height: 1; margin: 0;">Choose your <br><span style="color: #e2e8f0;">experience.</span></h1>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
             <% 
-                // FETCHING DYNAMIC DATA FROM DATABASE
                 AdminDAO dao = new AdminDAO();
                 List<Room> roomList = dao.getAllRooms();
-                
                 for(Room r : roomList) { 
             %>
-            <div class="group border border-slate-100 rounded-[2.5rem] p-6 hover:shadow-2xl transition-all bg-white">
-                <img src="<%= r.getImageUrl() %>" class="h-48 w-full object-cover rounded-[1.8rem] mb-6">
+            <div style="border: 1px solid #f1f5f9; border-radius: 2.5rem; padding: 1.5rem; background-color: white; transition: all 0.2s;">
+                <img src="<%= r.getImageUrl() %>" style="height: 12rem; width: 100%; object-fit: cover; border-radius: 1.8rem; margin-bottom: 1.5rem;">
                 
-                <div class="px-2">
-                    <h3 class="font-black text-2xl tracking-tighter"><%= r.getName() %></h3>
-                    <p class="text-slate-400 font-medium mb-6">$<%= r.getPrice() %> / Night</p>
+                <div style="padding: 0 0.5rem;">
+                    <h3 style="font-weight: 900; font-size: 1.5rem; letter-spacing: -0.05em; margin: 0;"><%= r.getName() %></h3>
+                    <p style="color: #94a3b8; font-weight: 500; margin: 0.5rem 0 1.5rem 0;">$<%= r.getPrice() %> / Night</p>
                     
                     <a href="details.jsp?type=<%= r.getName() %>&price=<%= r.getPrice() %>" 
-                       class="block w-full text-center bg-black text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-transform">
+                       style="display: block; width: 100%; text-align: center; background-color: black; color: white; padding: 1rem 0; border-radius: 1rem; font-weight: 900; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none;">
                        Select
                     </a>
                 </div>
